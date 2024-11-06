@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 from functools import reduce
+import time
 
 app = Flask(__name__)
 
@@ -109,15 +110,15 @@ def filter_and_sum_b1e():
     return jsonify({"result": summed})
 
 
-@app.route("/b2e", methods=["POST"])
-def dynamic_operations_b2e():
+@app.route("/b2g", methods=["POST"])
+def dynamic_operations_b2g():
     operation = dict(request.get_json())["operation"]
     values = list(dict(request.get_json())["values"])
 
     def add(a, b):
         return a + b
 
-    def subtract(a,b):
+    def subtract(a, b):
         return a - b
 
     operations = {"add": add,
@@ -126,6 +127,27 @@ def dynamic_operations_b2e():
     result = operations[operation](values[0], values[1])
 
     return jsonify({"result": result})
+
+
+@app.route("/b2f", methods=["POST"])
+def dynamic_operations_b2f():
+    r = dict(request.get_json())["range"]
+
+    def printer(r):
+        for i in range(r):
+            print(i)
+
+    def measure_runtime(func, *args):
+        start_time = time.time()
+
+        func(*args)
+
+        end_time = time.time()
+        t = end_time - start_time
+        return t
+
+    runtime = measure_runtime(printer, r)
+    return jsonify({"result": runtime})
 
 
 if __name__ == "__main__":
