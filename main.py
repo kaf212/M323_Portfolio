@@ -80,8 +80,8 @@ def filter_b1g():
     return jsonify({"result": filtered})
 
 
-@app.route("/b1e", methods=["POST"])
-def filter_splitt_b1e():
+@app.route("/b1f", methods=["POST"])
+def filter_splitt_b1f():
     numbers = list(dict(request.get_json())["value"])
 
     def is_even(x):
@@ -91,8 +91,8 @@ def filter_splitt_b1e():
     return jsonify({"result": filtered})
 
 
-@app.route("/b1f", methods=["POST"])
-def filter_and_sum_b1f():
+@app.route("/b1e", methods=["POST"])
+def filter_and_sum_b1e():
     numbers = list(dict(request.get_json())["value"])
 
     def filter_algorithm(lst):
@@ -106,7 +106,26 @@ def filter_and_sum_b1f():
 
     filtered = filter_algorithm(numbers)
     summed = sum_algorithm(filtered)
-    return summed
+    return jsonify({"result": summed})
+
+
+@app.route("/b2e", methods=["POST"])
+def dynamic_operations_b2e():
+    operation = dict(request.get_json())["operation"]
+    values = list(dict(request.get_json())["values"])
+
+    def add(a, b):
+        return a + b
+
+    def subtract(a,b):
+        return a - b
+
+    operations = {"add": add,
+                  "sub": subtract}
+
+    result = operations[operation](values[0], values[1])
+
+    return jsonify({"result": result})
 
 
 if __name__ == "__main__":
