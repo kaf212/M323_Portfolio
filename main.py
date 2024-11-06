@@ -129,25 +129,20 @@ def dynamic_operations_b2g():
     return jsonify({"result": result})
 
 
-@app.route("/b2f", methods=["POST"])
-def dynamic_operations_b2f():
-    r = dict(request.get_json())["range"]
+@app.route("/b2e", methods=["POST"])
+def multiplier_b2e():
+    value = dict(request.get_json())["value"]
 
-    def printer(r):
-        for i in range(r):
-            print(i)
+    def create_multiplier(multiplier):
+        def mult(x):
+            return multiplier * x
 
-    def measure_runtime(func, *args):
-        start_time = time.time()
+        return mult
 
-        func(*args)
+    multiply_by_three = create_multiplier(3)
+    result = multiply_by_three(value)
 
-        end_time = time.time()
-        t = end_time - start_time
-        return t
-
-    runtime = measure_runtime(printer, r)
-    return jsonify({"result": runtime})
+    return jsonify({"result": result})
 
 
 if __name__ == "__main__":
