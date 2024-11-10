@@ -210,29 +210,19 @@ def calculate_inventory_b4f():
     return jsonify({"total_value": total_value})
 
 
-@app.route("/b4e", methods=["GET"])
-def b4e():
-    orders = [
-        {"customer_id": 1, "amount": 150, "status": "completed"},
-        {"customer_id": 2, "amount": 200, "status": "completed"},
-        {"customer_id": 1, "amount": 50, "status": "pending"},
-        {"customer_id": 3, "amount": 300, "status": "completed"},
-        {"customer_id": 2, "amount": 120, "status": "canceled"},
-    ]
+@app.route("/c1f", methods=["GET"])
+def ugly_code_c1f():
+    d = [{"name": "apple", "price": 1.2, "quantity": 10},
+         {"name": "banana", "price": 0.8, "quantity": 5},
+         {"name": "cherry", "price": 2.5, "quantity": 7},
+         {"name": "date", "price": 3.0, "quantity": 0}]
 
-    completed_orders = list(filter(lambda order: order["status"] == "completed", orders))
+    t, r = 20, 0.1
 
-    order_tuples = list(map(lambda order: (order["customer_id"], order["amount"]), completed_orders))
+    p = reduce(lambda acc, x: acc + (x["price"] * x["quantity"] if x["quantity"] > 0 else 0), d, 0)
+    p = p - (p * r if p > t else 0)
 
-    total_per_customer = reduce(
-        lambda acc, item: {**acc, item[0]: acc.get(item[0], 0) + item[1]},
-        order_tuples,
-        {}
-    )
-
-    return jsonify(total_per_customer)
-
-
+    return jsonify({"p": p})
 
 
 if __name__ == "__main__":
