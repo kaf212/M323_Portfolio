@@ -155,6 +155,16 @@ def square_root_b3g():
     return jsonify({"result": result})
 
 
+@app.route("/b3f", methods=["POST"])
+def exp_b3f():
+    base = dict(request.get_json())["base"]
+    exponent = dict(request.get_json())["exponent"]
+
+    exp = lambda x, y: x ** y
+    result = exp(base, exponent)
+
+    return jsonify({"result": result})
+
 
 if __name__ == "__main__":
     app.run(debug=True)
