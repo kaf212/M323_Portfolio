@@ -210,7 +210,7 @@ def calculate_inventory_b4f():
     return jsonify({"total_value": total_value})
 
 
-@app.route("/c1f", methods=["GET"])
+@app.route("/c1f/ugly", methods=["GET"])
 def ugly_code_c1f():
     d = [{"name": "apple", "price": 1.2, "quantity": 10},
          {"name": "banana", "price": 0.8, "quantity": 5},
@@ -223,6 +223,31 @@ def ugly_code_c1f():
     p = p - (p * r if p > t else 0)
 
     return jsonify({"p": p})
+
+
+@app.route("/c1f/clean", methods=["GET"])
+def ugly_code_c1f():
+    items = [
+        {"name": "apple", "price": 1.2, "quantity": 10},
+        {"name": "banana", "price": 0.8, "quantity": 5},
+        {"name": "cherry", "price": 2.5, "quantity": 7},
+        {"name": "date", "price": 3.0, "quantity": 0}
+    ]
+
+    discount_threshold = 20
+    discount = 0.1
+
+    in_stock_items = filter(lambda item: item["quantity"] > 0, items)
+
+    item_values = map(lambda item: item["price"] * item["quantity"], in_stock_items)
+
+    total_price = reduce(lambda acc, value: acc + value, item_values, 0)
+
+    if total_price > discount_threshold:
+        total_price *= (1 - discount)
+
+    return jsonify({"total": total_price})
+
 
 
 if __name__ == "__main__":
