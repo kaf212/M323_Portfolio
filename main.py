@@ -145,5 +145,16 @@ def multiplier_b2e():
     return jsonify({"result": result})
 
 
+@app.route("/b3g", methods=["POST"])
+def square_root_b3g():
+    value = dict(request.get_json())["value"]
+
+    sqrt = lambda x: x ** 0.5
+    result = sqrt(value)
+
+    return jsonify({"result": result})
+
+
+
 if __name__ == "__main__":
     app.run(debug=True)
