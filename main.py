@@ -174,5 +174,66 @@ def filter_b3e():
 
     return jsonify({"filtered": list(filtered)})
 
+
+@app.route("/b4g", methods=["POST"])
+def b4g():
+    lst = list(dict(request.get_json())["list"])
+
+    doubled = map(lambda x: x * 2, lst)
+
+    filtered = filter(lambda x: x if x % 2 == 0 else None, lst)
+
+    reduced = reduce(lambda x, y: x + y, lst)
+
+    return jsonify({
+        "doubled": list(doubled),
+        "filtered": list(filtered),
+        "reduced": reduced
+    })
+
+
+@app.route("/b4f", methods=["GET"])
+def calculate_inventory_b4f():
+    products = [
+        {"name": "apple", "price": 1.2, "quantity": 10},
+        {"name": "banana", "price": 0.8, "quantity": 5},
+        {"name": "cherry", "price": 2.5, "quantity": 7},
+        {"name": "date", "price": 3.0, "quantity": 0},
+    ]
+
+    in_stock_products = list(filter(lambda p: p["quantity"] > 0, products))
+
+    product_values = list(map(lambda p: p["price"] * p["quantity"], in_stock_products))
+
+    total_value = reduce(lambda total, value: total + value, product_values)
+
+    return jsonify({"total_value": total_value})
+
+
+@app.route("/b4e", methods=["GET"])
+def b4e():
+    orders = [
+        {"customer_id": 1, "amount": 150, "status": "completed"},
+        {"customer_id": 2, "amount": 200, "status": "completed"},
+        {"customer_id": 1, "amount": 50, "status": "pending"},
+        {"customer_id": 3, "amount": 300, "status": "completed"},
+        {"customer_id": 2, "amount": 120, "status": "canceled"},
+    ]
+
+    completed_orders = list(filter(lambda order: order["status"] == "completed", orders))
+
+    order_tuples = list(map(lambda order: (order["customer_id"], order["amount"]), completed_orders))
+
+    total_per_customer = reduce(
+        lambda acc, item: {**acc, item[0]: acc.get(item[0], 0) + item[1]},
+        order_tuples,
+        {}
+    )
+
+    return jsonify(total_per_customer)
+
+
+
+
 if __name__ == "__main__":
     app.run(debug=True)
