@@ -166,5 +166,13 @@ def exp_b3f():
     return jsonify({"result": result})
 
 
+@app.route("/b3e", methods=["POST"])
+def filter_b3e():
+    lst = list(dict(request.get_json())["list"])
+
+    filtered = filter(lambda x: x if x % 2 == 0 else None, lst)
+
+    return jsonify({"filtered": list(filtered)})
+
 if __name__ == "__main__":
     app.run(debug=True)
